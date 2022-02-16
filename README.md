@@ -8,3 +8,14 @@
 * Min Xie
 * Osborn Del Angel
 
+## Trello Board
+
+* [Dunder-Snakes-Trello]: (https://trello.com/b/RAxuiEEU/dunder-snakes)
+
+## Wireframe
+
+![Wireframe](lazer_python.jpg)
+
+## Domain Model
+
+![Domain_Model](domain_model.jpg)
