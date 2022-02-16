@@ -72,6 +72,7 @@ What are the key strengths of each person on the team?
 - How will you communicate after hours and on the weekend?
 
   - Slack
+  - Cell Phone
 
 - What is your strategy for ensuring everyone’s voice is heard?
 
@@ -87,6 +88,10 @@ What are the key strengths of each person on the team?
 - How will you identify tasks, assign tasks, know when they are complete, and manage work in general?
 
   - Use project tools like Trello and check it daily.
+
+- When Code is completed in non-lab time:
+
+  - Peer programming
 
 - What project management tool will be used?
 
