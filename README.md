@@ -10,7 +10,7 @@
 
 ## Trello Board
 
-* [Dunder-Snakes-Trello]: (https://trello.com/b/RAxuiEEU/dunder-snakes)
+* [Dunder-Snakes-Trello](https://trello.com/b/RAxuiEEU/dunder-snakes)
 
 ## Wireframe
 
