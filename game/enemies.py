@@ -7,8 +7,10 @@ class Enemy(pygame.sprite.Sprite):
 
         self.image = pygame.Surface([width, height])
         self.image.fill(color)
-        # self.image.set_colorkey(COLOR)
 
         pygame.draw.rect(self.image, color, pygame.Rect(0, 0, width, height))
 
         self.rect = self.image.get_rect(midbottom=pos)
+
+    def update(self):
+        self.rect.y += 2
