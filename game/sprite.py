@@ -1,4 +1,5 @@
 import pygame
+from laser import Laser
 
 class Sprite(pygame.sprite.Sprite):
 
@@ -7,7 +8,9 @@ class Sprite(pygame.sprite.Sprite):
 
         self.image = pygame.Surface([width, height])
         self.image.fill(color)
-  
+        self.loaded = True
+        self.recharge_time = 0
+        self.laser = pygame.sprite.Group()
         self.rect = self.image.get_rect(midbottom = pos)
 
     def inputs(self):
@@ -29,12 +32,24 @@ class Sprite(pygame.sprite.Sprite):
         if key[pygame.K_DOWN]:
             if self.rect.y <= 570:
                 self.rect.y += dist
+                
+        if key[pygame.K_SPACE] & self.loaded:
+            self.fire()
+            
 
-        if key[pygame.K_SPACE]:
-            print("pew")
 
+    def fire(self):
+        self.laser.add(Laser(self.rect.center))
+        self.loaded = False
+        self.recharge_time = pygame.time.get_ticks()
+    
+    def recharge(self):
+        if pygame.time.get_ticks() - self.recharge_time > 250:
+            self.loaded = True
 
     def update(self):
         self.inputs()
+        self.recharge()
+        self.laser.update()
 
 

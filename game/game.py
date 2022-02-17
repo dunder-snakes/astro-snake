@@ -11,11 +11,15 @@ class Game:
         player_sprite = Sprite(YELLOW, 20, 20, (300, 600))
         sprite_enemy = Enemy(BLUE, 30, 30, (200, 450))
         self.player = pygame.sprite.GroupSingle(player_sprite)
+        self.laser = player_sprite.laser
         self.enemy = pygame.sprite.GroupSingle(sprite_enemy)
+
 
     def run(self):
         self.player.update()
         self.player.draw(screen)
+        self.laser.draw(screen)
+        
 
     def run_enemy(self):
         self.enemy.draw(screen)
