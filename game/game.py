@@ -66,6 +66,14 @@ class Game:
             for laser in self.laser:
                 laser.kill()
 
+    def draw_text(self, surf, text, size, x, y):
+        font_name = pygame.font.match_font('arial')
+        font = pygame.font.Font(font_name, size)
+        text_surface = font.render(text, True, BLUE)
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (x, y)
+        surf.blit(text_surface, text_rect)
+
     def game_over(self):
         if not self.player:
             pygame.quit()
@@ -89,6 +97,9 @@ if __name__ == "__main__":
                 moving = False
 
         screen.blit(back_image, (0,0))
+
+        game.draw_text(screen, str(game.player_score), 18, 300, 10)
+
         game.run()
 
         pygame.display.flip()
