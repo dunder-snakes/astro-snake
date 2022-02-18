@@ -12,6 +12,7 @@ class Game:
     def __init__(self):
         player_sprite = Sprite(YELLOW, 20, 20, (300, 600)) 
         self.player = pygame.sprite.GroupSingle(player_sprite)
+        self.player_score = 0
         self.laser = player_sprite.laser
         self.enemy = pygame.sprite.Group()
         self.enemy_cooldown = 1000
@@ -34,6 +35,13 @@ class Game:
     def spawn_enemy(self):
         spawn_x = random.randint(0, len(possible_x)-1)
         sprite_enemy = Enemy(BLUE, 30, 30, (possible_x[spawn_x], 0))
+        if self.player_score == 10:
+            self.enemy_cooldown = 750
+        if self.player_score == 15:
+            self.enemy_cooldown = 500
+        if self.player_score == 30:
+            self.enemy_cooldown = 250
+        
         if pygame.time.get_ticks() - self.spawn_time > self.enemy_cooldown:
             self.enemy.add(sprite_enemy)
             self.spawn_time = pygame.time.get_ticks()
@@ -49,6 +57,7 @@ class Game:
             for laser in self.laser:
                 if pygame.sprite.spritecollide(laser, self.enemy, True):
                     laser.kill()
+                    self.player_score += 1
         if self.enemy:
             for enemy in self.enemy:
                 if pygame.sprite.spritecollide(enemy, self.player, True):

@@ -44,7 +44,7 @@ class Sprite(pygame.sprite.Sprite):
         self.recharge_time = pygame.time.get_ticks()
     
     def recharge(self):
-        if pygame.time.get_ticks() - self.recharge_time > 250:
+        if pygame.time.get_ticks() - self.recharge_time > 150:
             self.loaded = True
 
     def update(self):
