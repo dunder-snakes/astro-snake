@@ -1,7 +1,7 @@
 import pygame
 from stars import Star
 import random
-from screen_display import DISPLAY_SIZE
+from constants import DISPLAY_SIZE
 
 
 class Background(pygame.sprite.Sprite):
