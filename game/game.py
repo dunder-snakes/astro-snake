@@ -3,6 +3,7 @@ from sprite import Sprite
 from enemies import Enemy
 import constants as c
 import random
+from stars import Star
 
 class Game:
     def __init__(self):
@@ -12,8 +13,14 @@ class Game:
         self.laser = player_sprite.laser
         self.enemy = pygame.sprite.Group()
         self.spawn_timer = random.randrange(30, 60)
+        self.stars = pygame.sprite.Group()
+        self.star_timer = random.randrange(1, 10)
 
     def run(self):
+        # background
+        self.render_background()
+        self.stars.draw(screen)
+        self.stars.update()
         #players
         self.player.update()
         self.player.draw(screen)
@@ -26,6 +33,15 @@ class Game:
         #collision
         self.collision()
         self.game_over()
+
+    def render_background(self):
+        new_star = Star()
+        if self.star_timer == 0:
+            self.stars.add(new_star)
+            self.star_timer = random.randrange(1, 10)
+        else: 
+            self.star_timer -= 1
+
 
     def spawn_enemy(self):
         sprite_enemy = Enemy()
@@ -72,8 +88,8 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(c.DISPLAY_SIZE)
     pygame.display.set_caption("Lazer Python")
     clock = pygame.time.Clock()
-    back_image = pygame.image.load("../domain_model.jpg")
-    back_image = pygame.transform.scale(back_image, c.DISPLAY_SIZE)
+    # back_image = pygame.image.load("../domain_model.jpg")
+    # back_image = pygame.transform.scale(back_image, c.DISPLAY_SIZE)
     game = Game()
 
     while True:
@@ -82,7 +98,8 @@ if __name__ == "__main__":
                 pygame.quit()
                 sys.exit()
 
-        screen.blit(back_image, (0,0))
+        screen.fill((0, 0, 0))
+        # screen.blit(back_image, (0,0))
 
         game.draw_text(screen, str(game.player_score), 18, c.DISPLAY_X//2, 10)
 
