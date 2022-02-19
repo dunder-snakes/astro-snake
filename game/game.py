@@ -1,15 +1,12 @@
-from distutils.spawn import spawn
 import pygame, sys
 from sprite import Sprite
 from enemies import Enemy
+import constants as c
 import random
-
-YELLOW = (255, 255, 0)
-BLUE = (0, 0, 255)
 
 class Game:
     def __init__(self):
-        player_sprite = Sprite((300, 600)) 
+        player_sprite = Sprite((c.DISPLAY_X // 2, c.DISPLAY_Y)) 
         self.player = pygame.sprite.GroupSingle(player_sprite)
         self.player_score = 0
         self.laser = player_sprite.laser
@@ -41,7 +38,7 @@ class Game:
     def kill_out_of_bounds(self):
         if self.enemy:
             for enemy in self.enemy:
-                if enemy.rect.y > 610:
+                if enemy.rect.y > c.DISPLAY_Y + enemy.rect.y:
                     enemy.kill()
 
     def collision(self):
@@ -61,7 +58,7 @@ class Game:
     def draw_text(self, surf, text, size, x, y):
         font_name = pygame.font.match_font('arial')
         font = pygame.font.Font(font_name, size)
-        text_surface = font.render(text, True, BLUE)
+        text_surface = font.render(text, True, c.BLUE)
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x, y)
         surf.blit(text_surface, text_rect)
@@ -72,11 +69,11 @@ class Game:
 
 if __name__ == "__main__":
     pygame.init()
-    screen = pygame.display.set_mode((600, 600))
+    screen = pygame.display.set_mode(c.DISPLAY_SIZE)
     pygame.display.set_caption("Lazer Python")
     clock = pygame.time.Clock()
     back_image = pygame.image.load("../domain_model.jpg")
-    back_image = pygame.transform.scale(back_image, (600,600))
+    back_image = pygame.transform.scale(back_image, c.DISPLAY_SIZE)
     game = Game()
 
     while True:
@@ -87,7 +84,7 @@ if __name__ == "__main__":
 
         screen.blit(back_image, (0,0))
 
-        game.draw_text(screen, str(game.player_score), 18, 300, 10)
+        game.draw_text(screen, str(game.player_score), 18, c.DISPLAY_X//2, 10)
 
         game.run()
 

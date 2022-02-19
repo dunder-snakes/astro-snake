@@ -1,5 +1,6 @@
 import pygame
 from laser import Laser
+import constants as c
 
 class Sprite(pygame.sprite.Sprite):
 
@@ -20,7 +21,7 @@ class Sprite(pygame.sprite.Sprite):
         key = pygame.key.get_pressed()
 
         if key[pygame.K_RIGHT]:
-            if self.rect.x != 600 - self.rect.width:
+            if self.rect.x != c.DISPLAY_X - self.rect.width:
                 self.rect.x += self.dist
 
         if key[pygame.K_LEFT]:
@@ -32,7 +33,7 @@ class Sprite(pygame.sprite.Sprite):
                 self.rect.y -= self.dist
 
         if key[pygame.K_DOWN]:
-            if self.rect.y != 600 - self.rect.height:
+            if self.rect.y != c.DISPLAY_Y - self.rect.height:
                 self.rect.y += self.dist
                 
         if key[pygame.K_SPACE] & self.loaded:
