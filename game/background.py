@@ -17,7 +17,7 @@ class Background(pygame.sprite.Sprite):
 
 # while the game loops, timer decreases and a new star is added when it hits zero
   def update(self):
-    self.stars.update()
+    self.star.update()
     if self.timer == 0:
         new_star = Star()
         self.stars.add(new_star)

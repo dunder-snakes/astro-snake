@@ -6,8 +6,6 @@ import random
 from background import Background
 import screen_display
 
-# bground = Background()
-# bground_group = pygame.sprite.Group(bground)
 
 
 YELLOW = (255, 255, 0)
@@ -96,7 +94,8 @@ if __name__ == "__main__":
     back_image = pygame.image.load("../domain_model.jpg")
     back_image = pygame.transform.scale(back_image, (screen_display.DISPLAY_SIZE))
 
-
+    # bground_group = pygame.sprite.Group(Background())
+    # bground_group.draw(screen)
 
     game = Game()
 
@@ -109,7 +108,6 @@ if __name__ == "__main__":
                 sys.exit()
                 moving = False
 
-
         screen.blit(back_image, (0,0))
 
 # score
@@ -117,6 +115,7 @@ if __name__ == "__main__":
 
         game.run()
 
+# displays entire screen content
         pygame.display.flip()
 
         clock.tick(60)
