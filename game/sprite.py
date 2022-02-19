@@ -3,11 +3,13 @@ from laser import Laser
 
 class Sprite(pygame.sprite.Sprite):
 
-    def __init__(self, color, width, height, pos):
+    def __init__(self, width, height, pos):
         super().__init__()
 
         self.image = pygame.Surface([width, height])
-        self.image.fill(color)
+        self.sp_image = pygame.image.load("/assets/snake.png")
+        self.sprite_img = pygame.transform.scale(self.en_image,(width, height))
+        self.image.blit(self.enemy,(0,0))
         self.loaded = True
         self.recharge_time = 0
         self.laser = pygame.sprite.Group()
