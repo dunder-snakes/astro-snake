@@ -3,6 +3,12 @@ import pygame, sys
 from sprite import Sprite
 from enemies import Enemy
 import random
+from background import Background
+import screen_display
+
+# bground = Background()
+# bground_group = pygame.sprite.Group(bground)
+
 
 YELLOW = (255, 255, 0)
 BLUE = (0, 0, 255)
@@ -66,6 +72,7 @@ class Game:
             for laser in self.laser:
                 laser.kill()
 
+# scoreboard
     def draw_text(self, surf, text, size, x, y):
         font_name = pygame.font.match_font('arial')
         font = pygame.font.Font(font_name, size)
@@ -78,13 +85,19 @@ class Game:
         if not self.player:
             pygame.quit()
 
+
 if __name__ == "__main__":
     pygame.init()
-    screen = pygame.display.set_mode((600, 600))
+
+    screen = pygame.display.set_mode((screen_display.DISPLAY_SIZE))
     pygame.display.set_caption("Lazer Python")
     clock = pygame.time.Clock()
+
     back_image = pygame.image.load("../domain_model.jpg")
-    back_image = pygame.transform.scale(back_image, (600,600))
+    back_image = pygame.transform.scale(back_image, (screen_display.DISPLAY_SIZE))
+
+
+
     game = Game()
 
     moving = True
@@ -96,8 +109,10 @@ if __name__ == "__main__":
                 sys.exit()
                 moving = False
 
+
         screen.blit(back_image, (0,0))
 
+# score
         game.draw_text(screen, str(game.player_score), 18, 300, 10)
 
         game.run()

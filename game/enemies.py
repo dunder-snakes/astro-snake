@@ -9,5 +9,7 @@ class Enemy(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect(midbottom=pos)
 
+
+
     def update(self):
         self.rect.y += 1
