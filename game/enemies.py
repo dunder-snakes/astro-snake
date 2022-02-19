@@ -6,9 +6,9 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
 
-        self.image = pygame.Surface([30, 30])
-        ## Change picture to mongoose
-        self.en_image = pygame.image.load("../assets/snake.png").convert_alpha()
+        self.image = pygame.Surface([30, 30], pygame.SRCALPHA, 32)
+        self.image = self.image.convert_alpha()
+        self.en_image = pygame.image.load("../assets/mongoose.png")
         self.enemy = pygame.transform.scale(self.en_image,(30, 30))
         self.image.blit(self.enemy,(0,0))
         self.rect = self.image.get_rect()
