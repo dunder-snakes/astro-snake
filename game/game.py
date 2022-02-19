@@ -6,17 +6,15 @@ import random
 
 YELLOW = (255, 255, 0)
 BLUE = (0, 0, 255)
-possible_x = random.sample(range(15, 586), 30)
 
 class Game:
     def __init__(self):
-        player_sprite = Sprite(50, 50, (300, 600)) 
+        player_sprite = Sprite((300, 600)) 
         self.player = pygame.sprite.GroupSingle(player_sprite)
         self.player_score = 0
         self.laser = player_sprite.laser
         self.enemy = pygame.sprite.Group()
-        self.enemy_cooldown = 1000
-        self.spawn_time = 0
+        self.spawn_timer = random.randrange(30, 60)
 
     def run(self):
         #players
@@ -33,18 +31,12 @@ class Game:
         self.game_over()
 
     def spawn_enemy(self):
-        spawn_x = random.randint(0, len(possible_x)-1)
-        sprite_enemy = Enemy(30, 30, (possible_x[spawn_x], 0))
-        if self.player_score == 10:
-            self.enemy_cooldown = 750
-        if self.player_score == 15:
-            self.enemy_cooldown = 500
-        if self.player_score == 30:
-            self.enemy_cooldown = 250
-        
-        if pygame.time.get_ticks() - self.spawn_time > self.enemy_cooldown:
+        sprite_enemy = Enemy()
+        if self.spawn_timer == 0:
             self.enemy.add(sprite_enemy)
-            self.spawn_time = pygame.time.get_ticks()
+            self.spawn_timer = random.randrange(30, 60)
+        else:
+            self.spawn_timer -= 1
     
     def kill_out_of_bounds(self):
         if self.enemy:
@@ -57,7 +49,7 @@ class Game:
             for laser in self.laser:
                 if pygame.sprite.spritecollide(laser, self.enemy, True):
                     laser.kill()
-                    self.player_score += 1
+                    self.player_score += 1000
         if self.enemy:
             for enemy in self.enemy:
                 if pygame.sprite.spritecollide(enemy, self.player, True):
@@ -87,14 +79,11 @@ if __name__ == "__main__":
     back_image = pygame.transform.scale(back_image, (600,600))
     game = Game()
 
-    moving = True
-
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-                moving = False
 
         screen.blit(back_image, (0,0))
 
