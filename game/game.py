@@ -46,7 +46,7 @@ class Game:
             for laser in self.laser:
                 if pygame.sprite.spritecollide(laser, self.enemy, True):
                     laser.kill()
-                    self.player_score += 1000
+                    self.player_score += c.POINTS
         if self.enemy:
             for enemy in self.enemy:
                 if pygame.sprite.spritecollide(enemy, self.player, True):
@@ -90,4 +90,4 @@ if __name__ == "__main__":
 
         pygame.display.flip()
 
-        clock.tick(60)
+        clock.tick(c.FPS)
