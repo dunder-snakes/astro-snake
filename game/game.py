@@ -10,7 +10,7 @@ possible_x = random.sample(range(15, 586), 30)
 
 class Game:
     def __init__(self):
-        player_sprite = Sprite(YELLOW, 20, 20, (300, 600)) 
+        player_sprite = Sprite(50, 50, (300, 600)) 
         self.player = pygame.sprite.GroupSingle(player_sprite)
         self.player_score = 0
         self.laser = player_sprite.laser
@@ -34,7 +34,7 @@ class Game:
 
     def spawn_enemy(self):
         spawn_x = random.randint(0, len(possible_x)-1)
-        sprite_enemy = Enemy(BLUE, 30, 30, (possible_x[spawn_x], 0))
+        sprite_enemy = Enemy(30, 30, (possible_x[spawn_x], 0))
         if self.player_score == 10:
             self.enemy_cooldown = 750
         if self.player_score == 15:
