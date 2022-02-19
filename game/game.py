@@ -3,6 +3,12 @@ import pygame, sys
 from sprite import Sprite
 from enemies import Enemy
 import random
+from background import Background
+import screen_display
+
+# bground = Background()
+# bground_group = pygame.sprite.Group(bground)
+
 
 YELLOW = (255, 255, 0)
 BLUE = (0, 0, 255)
@@ -12,6 +18,7 @@ class Game:
     def __init__(self):
         player_sprite = Sprite(YELLOW, 20, 20, (300, 600)) 
         self.player = pygame.sprite.GroupSingle(player_sprite)
+        self.player_score = 0
         self.laser = player_sprite.laser
         self.enemy = pygame.sprite.Group()
         self.enemy_cooldown = 1000
@@ -34,6 +41,13 @@ class Game:
     def spawn_enemy(self):
         spawn_x = random.randint(0, len(possible_x)-1)
         sprite_enemy = Enemy(BLUE, 30, 30, (possible_x[spawn_x], 0))
+        if self.player_score == 10:
+            self.enemy_cooldown = 750
+        if self.player_score == 15:
+            self.enemy_cooldown = 500
+        if self.player_score == 30:
+            self.enemy_cooldown = 250
+        
         if pygame.time.get_ticks() - self.spawn_time > self.enemy_cooldown:
             self.enemy.add(sprite_enemy)
             self.spawn_time = pygame.time.get_ticks()
@@ -49,6 +63,7 @@ class Game:
             for laser in self.laser:
                 if pygame.sprite.spritecollide(laser, self.enemy, True):
                     laser.kill()
+                    self.player_score += 1
         if self.enemy:
             for enemy in self.enemy:
                 if pygame.sprite.spritecollide(enemy, self.player, True):
@@ -57,17 +72,32 @@ class Game:
             for laser in self.laser:
                 laser.kill()
 
+# scoreboard
+    def draw_text(self, surf, text, size, x, y):
+        font_name = pygame.font.match_font('arial')
+        font = pygame.font.Font(font_name, size)
+        text_surface = font.render(text, True, BLUE)
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (x, y)
+        surf.blit(text_surface, text_rect)
+
     def game_over(self):
         if not self.player:
             pygame.quit()
 
+
 if __name__ == "__main__":
     pygame.init()
-    screen = pygame.display.set_mode((600, 600))
+
+    screen = pygame.display.set_mode((screen_display.DISPLAY_SIZE))
     pygame.display.set_caption("Lazer Python")
     clock = pygame.time.Clock()
+
     back_image = pygame.image.load("../domain_model.jpg")
-    back_image = pygame.transform.scale(back_image, (600,600))
+    back_image = pygame.transform.scale(back_image, (screen_display.DISPLAY_SIZE))
+
+
+
     game = Game()
 
     moving = True
@@ -79,7 +109,12 @@ if __name__ == "__main__":
                 sys.exit()
                 moving = False
 
+
         screen.blit(back_image, (0,0))
+
+# score
+        game.draw_text(screen, str(game.player_score), 18, 300, 10)
+
         game.run()
 
         pygame.display.flip()
