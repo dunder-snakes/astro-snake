@@ -1,4 +1,5 @@
 import pygame, sys
+from eagles import Eagles
 from sprite import Sprite
 from enemies import Enemy
 from stars import Star
@@ -22,7 +23,11 @@ class Game:
         # laser
         self.laser = player_sprite.laser
         # enemy
+        self.eagle_enemy = Eagles()
+        self.hit_cnt = 0
+        self.eagle_laser = self.eagle_enemy.eg_laser
         self.enemy = pygame.sprite.Group()
+        self.eagle = pygame.sprite.Group()
         self.spawn_timer = random.randrange(30, 60)
         # disintegrate
         self.disintegrate = pygame.sprite.Group()
@@ -36,11 +41,16 @@ class Game:
         self.player.update()
         self.player.draw(screen)
         self.laser.draw(screen)
-        # enemies
+        
+        #enemies
         self.spawn_enemy()
         self.enemy.draw(screen)
         self.enemy.update()
-        # collision
+        self.eagle.draw(screen)
+        self.eagle_laser.draw(screen) 
+        self.eagle.update()
+
+        #collision
         self.collision()
         self.game_over()
         # boom boom
@@ -63,6 +73,11 @@ class Game:
         else:
             self.spawn_timer -= 1
 
+        if self.player_score == 5000 and len(self.eagle) < 1:
+            self.eagle.add(self.eagle_enemy)
+    
+
+
     def enemy_go_boom(self, pos):
         for _ in range(random.randrange(10, 30)):
             particle = Disintegrate()
@@ -70,7 +85,9 @@ class Game:
             particle.rect.y = pos[1]
             self.disintegrate.add(particle)
 
+
     def collision(self):
+        
         if self.laser:
             for laser in self.laser:
                 if pygame.sprite.spritecollide(laser, self.enemy, True):
@@ -78,12 +95,40 @@ class Game:
                     exp_sound = mixer.Sound("../assets/explosion.wav")
                     exp_sound.play()
                     laser.kill()
+
+                    self.player_score += 1000
+                if pygame.sprite.spritecollide(laser, self.eagle, False):
+                    self.hit_cnt += 1
+                    laser.kill()
+                    if self.hit_cnt == 50:
+                        pygame.sprite.spritecollide(laser, self.eagle, True)
+                        laser.kill()
+                        self.player_score += 2500
+
+        if self.eagle_laser:
+            for laser in self.eagle_laser:
+                if pygame.sprite.spritecollide(laser, self.player, True):
+                    laser.kill()
+                    self.player_score += 1000
+                if len(self.eagle) == 0:
+                    laser.kill()
+
+
                     self.player_score += c.POINTS
+
         if self.enemy:
             for enemy in self.enemy:
                 if pygame.sprite.spritecollide(enemy, self.player, True):
                     enemy.kill()
+
+        if self.eagle:
+            for eagle in self.eagle:
+                if pygame.sprite.spritecollide(eagle, self.player, True):
+                    eagle.kill()
+                
         if not self.player:
+            for laser in self.eagle_laser:
+                laser.kill()
             for laser in self.laser:
                 laser.kill()
 
@@ -106,9 +151,11 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(c.DISPLAY_SIZE)
     pygame.display.set_caption("Lazer Python")
     clock = pygame.time.Clock()
+
     mixer.music.load("../assets/background.wav")
     mixer.music.set_volume(0.1)
     mixer.music.play()
+
 
     game = Game()
 
