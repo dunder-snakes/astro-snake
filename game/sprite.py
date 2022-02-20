@@ -16,7 +16,7 @@ class Sprite(pygame.sprite.Sprite):
         self.recharge_time = 0
         self.laser = pygame.sprite.Group()
         self.rect = self.image.get_rect(midbottom = pos)
-        self.dist = 5
+        self.dist = c.DISTANCE
 
     def inputs(self):
         key = pygame.key.get_pressed()
