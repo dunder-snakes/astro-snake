@@ -1,69 +1,84 @@
-from distutils.spawn import spawn
 import pygame, sys
 from sprite import Sprite
 from enemies import Enemy
+from stars import Star
+from disintegrate import Disintegrate
+import constants as c
 import random
-from background import Background
-import screen_display
+from stars import Star
+from pygame import mixer
 
-# bground = Background()
-# bground_group = pygame.sprite.Group(bground)
-
-
-YELLOW = (255, 255, 0)
-BLUE = (0, 0, 255)
-possible_x = random.sample(range(15, 586), 30)
 
 class Game:
     def __init__(self):
-        player_sprite = Sprite(YELLOW, 20, 20, (300, 600)) 
-        self.player = pygame.sprite.GroupSingle(player_sprite)
+        # background
+        self.stars = pygame.sprite.Group()
+        self.star_timer = random.randrange(1, 10)
+        # player
+        player_sprite = Sprite((c.DISPLAY_X // 2, c.DISPLAY_Y))
+        self.player = pygame.sprite.Group()
+        self.player.add(player_sprite)
         self.player_score = 0
+        # laser
         self.laser = player_sprite.laser
+        # enemy
         self.enemy = pygame.sprite.Group()
-        self.enemy_cooldown = 1000
-        self.spawn_time = 0
+        self.spawn_timer = random.randrange(30, 60)
+        # disintegrate
+        self.disintegrate = pygame.sprite.Group()
 
     def run(self):
-        #players
+
+        self.render_background()
+        self.stars.draw(screen)
+        self.stars.update()
+        # players
         self.player.update()
         self.player.draw(screen)
         self.laser.draw(screen)
-        #enemies
+        # enemies
         self.spawn_enemy()
         self.enemy.draw(screen)
-        self.enemy.update() 
-        self.kill_out_of_bounds()
-        #collision
+        self.enemy.update()
+        # collision
         self.collision()
         self.game_over()
+        # boom boom
+        self.disintegrate.draw(screen)
+        self.disintegrate.update()
+
+    def render_background(self):
+        new_star = Star()
+        if self.star_timer == 0:
+            self.stars.add(new_star)
+            self.star_timer = random.randrange(1, 10)
+        else:
+            self.star_timer -= 1
 
     def spawn_enemy(self):
-        spawn_x = random.randint(0, len(possible_x)-1)
-        sprite_enemy = Enemy(BLUE, 30, 30, (possible_x[spawn_x], 0))
-        if self.player_score == 10:
-            self.enemy_cooldown = 750
-        if self.player_score == 15:
-            self.enemy_cooldown = 500
-        if self.player_score == 30:
-            self.enemy_cooldown = 250
-        
-        if pygame.time.get_ticks() - self.spawn_time > self.enemy_cooldown:
+        sprite_enemy = Enemy()
+        if self.spawn_timer == 0:
             self.enemy.add(sprite_enemy)
-            self.spawn_time = pygame.time.get_ticks()
-    
-    def kill_out_of_bounds(self):
-        if self.enemy:
-            for enemy in self.enemy:
-                if enemy.rect.y > 610:
-                    enemy.kill()
+            self.spawn_timer = random.randrange(30, 60)
+        else:
+            self.spawn_timer -= 1
+
+    def enemy_go_boom(self, pos):
+        for _ in range(random.randrange(10, 30)):
+            particle = Disintegrate()
+            particle.rect.x = pos[0]
+            particle.rect.y = pos[1]
+            self.disintegrate.add(particle)
 
     def collision(self):
         if self.laser:
             for laser in self.laser:
                 if pygame.sprite.spritecollide(laser, self.enemy, True):
+                    self.enemy_go_boom((laser.rect.x, laser.rect.y))
+                    exp_sound = mixer.Sound("../assets/explosion.wav")
+                    exp_sound.play()
                     laser.kill()
-                    self.player_score += 1
+                    self.player_score += c.POINTS
         if self.enemy:
             for enemy in self.enemy:
                 if pygame.sprite.spritecollide(enemy, self.player, True):
@@ -74,9 +89,8 @@ class Game:
 
 # scoreboard
     def draw_text(self, surf, text, size, x, y):
-        font_name = pygame.font.match_font('arial')
-        font = pygame.font.Font(font_name, size)
-        text_surface = font.render(text, True, BLUE)
+        font = pygame.font.Font("../assets/ARCADECLASSIC.TTF", size)
+        text_surface = font.render(text, True, c.WHITE)
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x, y)
         surf.blit(text_surface, text_rect)
@@ -88,35 +102,29 @@ class Game:
 
 if __name__ == "__main__":
     pygame.init()
-
-    screen = pygame.display.set_mode((screen_display.DISPLAY_SIZE))
+    
+    screen = pygame.display.set_mode(c.DISPLAY_SIZE)
     pygame.display.set_caption("Lazer Python")
     clock = pygame.time.Clock()
-
-    back_image = pygame.image.load("../domain_model.jpg")
-    back_image = pygame.transform.scale(back_image, (screen_display.DISPLAY_SIZE))
-
-
+    mixer.music.load("../assets/background.wav")
+    mixer.music.set_volume(0.1)
+    mixer.music.play()
 
     game = Game()
-
-    moving = True
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-                moving = False
 
+        screen.fill(c.BLACK)
+        
+        game.draw_text(screen, str(game.player_score), 30, c.DISPLAY_X // 2, 10)
 
-        screen.blit(back_image, (0,0))
-
-# score
-        game.draw_text(screen, str(game.player_score), 18, 300, 10)
 
         game.run()
 
         pygame.display.flip()
 
-        clock.tick(60)
+        clock.tick(c.FPS)
