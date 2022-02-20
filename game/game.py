@@ -6,6 +6,8 @@ from disintegrate import Disintegrate
 import constants as c
 import random
 from stars import Star
+from pygame import mixer
+
 
 class Game:
     def __init__(self):
@@ -13,7 +15,7 @@ class Game:
         self.stars = pygame.sprite.Group()
         self.star_timer = random.randrange(1, 10)
         # player
-        player_sprite = Sprite((c.DISPLAY_X // 2, c.DISPLAY_Y)) 
+        player_sprite = Sprite((c.DISPLAY_X // 2, c.DISPLAY_Y))
         self.player = pygame.sprite.Group()
         self.player.add(player_sprite)
         self.player_score = 0
@@ -22,30 +24,28 @@ class Game:
         # enemy
         self.enemy = pygame.sprite.Group()
         self.spawn_timer = random.randrange(30, 60)
-        #disintegrate
+        # disintegrate
         self.disintegrate = pygame.sprite.Group()
-        
 
     def run(self):
 
         self.render_background()
         self.stars.draw(screen)
         self.stars.update()
-        #players
+        # players
         self.player.update()
         self.player.draw(screen)
         self.laser.draw(screen)
-        #enemies
+        # enemies
         self.spawn_enemy()
         self.enemy.draw(screen)
-        self.enemy.update() 
-        #collision
+        self.enemy.update()
+        # collision
         self.collision()
         self.game_over()
-        #boom boom
+        # boom boom
         self.disintegrate.draw(screen)
         self.disintegrate.update()
-
 
     def render_background(self):
         new_star = Star()
@@ -60,9 +60,8 @@ class Game:
         if self.star_timer == 0:
             self.stars.add(new_star)
             self.star_timer = random.randrange(1, 10)
-        else: 
+        else:
             self.star_timer -= 1
-
 
     def spawn_enemy(self):
         sprite_enemy = Enemy()
@@ -78,7 +77,10 @@ class Game:
             particle.rect.x = pos[0]
             particle.rect.y = pos[1]
             self.disintegrate.add(particle)
-    
+            mixer.music.load("../assets/explosion.wav")
+            mixer.music.set_volume(0.1)
+            mixer.music.play()
+
     def collision(self):
         if self.laser:
             for laser in self.laser:
@@ -105,11 +107,15 @@ class Game:
         if not self.player:
             pygame.quit()
 
+
 if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode(c.DISPLAY_SIZE)
     pygame.display.set_caption("Lazer Python")
     clock = pygame.time.Clock()
+    mixer.music.load("../assets/background.wav")
+    mixer.music.set_volume(0.1)
+    mixer.music.play()
     game = Game()
 
     while True:
@@ -118,10 +124,9 @@ if __name__ == "__main__":
                 pygame.quit()
                 sys.exit()
 
-        screen.fill((0,0,0))
+        screen.fill((0, 0, 0))
 
-
-        game.draw_text(screen, str(game.player_score), 30, c.DISPLAY_X//2, 10)
+        game.draw_text(screen, str(game.player_score), 30, c.DISPLAY_X // 2, 10)
 
         game.run()
 
