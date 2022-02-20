@@ -77,17 +77,16 @@ class Game:
             particle.rect.x = pos[0]
             particle.rect.y = pos[1]
             self.disintegrate.add(particle)
-            mixer.music.load("../assets/explosion.wav")
-            mixer.music.set_volume(0.1)
-            mixer.music.play()
 
     def collision(self):
         if self.laser:
             for laser in self.laser:
                 if pygame.sprite.spritecollide(laser, self.enemy, True):
                     self.enemy_go_boom((laser.rect.x, laser.rect.y))
+                    exp_sound = mixer.Sound("../assets/explosion.wav")
+                    exp_sound.play()
                     laser.kill()
-                    self.player_score += 1000
+                    self.player_score += c.POINTS
         if self.enemy:
             for enemy in self.enemy:
                 if pygame.sprite.spritecollide(enemy, self.player, True):
@@ -116,6 +115,7 @@ if __name__ == "__main__":
     mixer.music.load("../assets/background.wav")
     mixer.music.set_volume(0.1)
     mixer.music.play()
+
     game = Game()
 
     while True:
@@ -132,4 +132,4 @@ if __name__ == "__main__":
 
         pygame.display.flip()
 
-        clock.tick(60)
+        clock.tick(c.FPS)
