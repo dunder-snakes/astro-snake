@@ -1,4 +1,5 @@
 import random
+
 #screen
 DISPLAY_X = 600
 DISPLAY_Y = 600
@@ -21,4 +22,3 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GOLD = (255,215,0)
 RANDOM_COLOR = (random.randrange(0,255), random.randrange(0,255), random.randrange(0,255))
-
