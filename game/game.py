@@ -55,14 +55,6 @@ class Game:
         else:
             self.star_timer -= 1
 
-    def render_background(self):
-        new_star = Star()
-        if self.star_timer == 0:
-            self.stars.add(new_star)
-            self.star_timer = random.randrange(1, 10)
-        else:
-            self.star_timer -= 1
-
     def spawn_enemy(self):
         sprite_enemy = Enemy()
         if self.spawn_timer == 0:
@@ -124,8 +116,8 @@ if __name__ == "__main__":
                 pygame.quit()
                 sys.exit()
 
-        screen.fill((0, 0, 0))
-
+        screen.fill(c.BLACK)
+        
         game.draw_text(screen, str(game.player_score), 30, c.DISPLAY_X // 2, 10)
 
         game.run()

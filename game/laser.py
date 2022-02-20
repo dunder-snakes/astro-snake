@@ -18,6 +18,6 @@ class Laser(pygame.sprite.Sprite):
         laser_sound.play()
 
     def update(self):
-        self.rect.y += -8
+        self.rect.y += c.LASER_SPEED
         if self.rect.y < 0:
             self.kill()
