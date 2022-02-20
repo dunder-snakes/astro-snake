@@ -20,3 +20,5 @@ class Enemy(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.y += self.speed
+        if self.rect.y > c.DISPLAY_Y + self.rect.y:
+            self.kill()
