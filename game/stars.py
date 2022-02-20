@@ -2,8 +2,6 @@ import pygame
 import random
 import constants as c
 
-
-
 class Star(pygame.sprite.Sprite):
   def __init__(self):
     super().__init__()
@@ -11,7 +9,7 @@ class Star(pygame.sprite.Sprite):
     self.width = random.randrange(1, 4)
     self.height = self.width
     self.image = pygame.Surface((self.width, self.height))
-    self.image.fill((255,255,255))
+    self.image.fill(c.WHITE)
     self.rect = self.image.get_rect()
     self.rect.x = random.randrange(0, c.DISPLAY_X - self.rect.width)
     self.rect.y = self.rect.height
