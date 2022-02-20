@@ -3,6 +3,7 @@ import random
 import constants as c
 
 
+
 class Star(pygame.sprite.Sprite):
   def __init__(self):
     super().__init__()
@@ -14,7 +15,7 @@ class Star(pygame.sprite.Sprite):
     self.rect = self.image.get_rect()
     self.rect.x = random.randrange(0, c.DISPLAY_X - self.rect.width)
     self.rect.y = self.rect.height
-# play with this tuple to set speed of stars
+
     self.velocity_y = random.randrange(4, 22)
 
 # updates every frame

@@ -5,6 +5,7 @@ from stars import Star
 from disintegrate import Disintegrate
 import constants as c
 import random
+from stars import Star
 
 class Game:
     def __init__(self):
@@ -21,12 +22,12 @@ class Game:
         # enemy
         self.enemy = pygame.sprite.Group()
         self.spawn_timer = random.randrange(30, 60)
-        # disintegration
+        #disintegrate
         self.disintegrate = pygame.sprite.Group()
         
 
     def run(self):
-        # stars
+
         self.render_background()
         self.stars.draw(screen)
         self.stars.update()
@@ -53,6 +54,15 @@ class Game:
             self.star_timer = random.randrange(1, 10)
         else:
             self.star_timer -= 1
+
+    def render_background(self):
+        new_star = Star()
+        if self.star_timer == 0:
+            self.stars.add(new_star)
+            self.star_timer = random.randrange(1, 10)
+        else: 
+            self.star_timer -= 1
+
 
     def spawn_enemy(self):
         sprite_enemy = Enemy()
@@ -109,6 +119,7 @@ if __name__ == "__main__":
                 sys.exit()
 
         screen.fill((0,0,0))
+
 
         game.draw_text(screen, str(game.player_score), 30, c.DISPLAY_X//2, 10)
 
