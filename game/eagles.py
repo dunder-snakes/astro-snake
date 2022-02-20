@@ -6,7 +6,7 @@ class Eagles(pygame.sprite.Sprite):
 
         self.image = pygame.Surface([width, height], pygame.SRCALPHA, 32)
         self.image = self.image.convert_alpha()
-        self.en_image = pygame.image.load("mongoose.png")
+        self.en_image = pygame.image.load("mongoose.png").convert_alpha()
         self.enemy = pygame.transform.scale(self.en_image,(width, height))
         self.image.blit(self.enemy,(0,0))
 
