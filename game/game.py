@@ -87,6 +87,7 @@ class Game:
             for laser in self.laser:
                 laser.kill()
 
+# scoreboard
     def draw_text(self, surf, text, size, x, y):
         font = pygame.font.Font("../assets/ARCADECLASSIC.TTF", size)
         text_surface = font.render(text, True, c.WHITE)
@@ -101,6 +102,7 @@ class Game:
 
 if __name__ == "__main__":
     pygame.init()
+    
     screen = pygame.display.set_mode(c.DISPLAY_SIZE)
     pygame.display.set_caption("Lazer Python")
     clock = pygame.time.Clock()
@@ -119,6 +121,7 @@ if __name__ == "__main__":
         screen.fill(c.BLACK)
         
         game.draw_text(screen, str(game.player_score), 30, c.DISPLAY_X // 2, 10)
+
 
         game.run()
 

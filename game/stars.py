@@ -13,7 +13,6 @@ class Star(pygame.sprite.Sprite):
     self.rect = self.image.get_rect()
     self.rect.x = random.randrange(0, c.DISPLAY_X - self.rect.width)
     self.rect.y = self.rect.height
-
     self.velocity_y = random.randrange(4, 22)
 
 # updates every frame

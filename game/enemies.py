@@ -16,6 +16,8 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.y = -self.rect.height
         self.speed = random.randrange(1, 5)
 
+
+
     def update(self):
         self.rect.y += self.speed
         if self.rect.y > c.DISPLAY_Y + self.rect.y:
