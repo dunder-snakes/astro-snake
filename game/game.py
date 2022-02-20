@@ -51,11 +51,13 @@ class Game:
         else:
             self.spawn_timer -= 1
     
+
     def kill_out_of_bounds(self):
         if self.enemy:
             for enemy in self.enemy:
                 if enemy.rect.y > c.DISPLAY_Y + enemy.rect.y:
                     enemy.kill()
+
 
     def collision(self):
         if self.laser:
@@ -71,6 +73,7 @@ class Game:
             for laser in self.laser:
                 laser.kill()
 
+
     def draw_text(self, surf, text, size, x, y):
         font_name = pygame.font.match_font('arial')
         font = pygame.font.Font(font_name, size)
@@ -79,9 +82,11 @@ class Game:
         text_rect.midtop = (x, y)
         surf.blit(text_surface, text_rect)
 
+
     def game_over(self):
         if not self.player:
             pygame.quit()
+
 
 if __name__ == "__main__":
     pygame.init()
