@@ -26,7 +26,6 @@ class Eagles(pygame.sprite.Sprite):
     def enemy_fire(self):
         self.eg_laser.add(Eaglaser(self.rect.midbottom))
         self.loaded = False
-        pygame.transform.rotate(self.image,)
         self.recharge_time = pygame.time.get_ticks()
 
     # def blitRotateCenter(surf, image, topleft, angle):
