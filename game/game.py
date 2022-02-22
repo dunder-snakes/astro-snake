@@ -232,7 +232,7 @@ class Game:
         surf.blit(text_surface, text_rect)
 
 # heatlth
-    def drawStatusBar(self, x, y,health):
+    def draw_health(self, x, y,health):
         bar_width = 100
         bar_height = 10
         bar_fill = (health / 100) * bar_width
@@ -271,7 +271,7 @@ if __name__ == "__main__":
         
         game.draw_text(screen, str(game.player_score), 30, c.DISPLAY_X // 2, 10)
 
-        game.drawStatusBar(15,540,game.health)
+        game.draw_health(15,540,game.health)
 
         game.run()
 
