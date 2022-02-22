@@ -1,7 +1,7 @@
 import pygame
 from stars import Star
 import random
-from constants import DISPLAY_SIZE
+from screen_display import DISPLAY_SIZE
 
 
 class Background(pygame.sprite.Sprite):
@@ -17,7 +17,7 @@ class Background(pygame.sprite.Sprite):
 
 # while the game loops, timer decreases and a new star is added when it hits zero
   def update(self):
-    self.star.update()
+    self.stars.update()
     if self.timer == 0:
         new_star = Star()
         self.stars.add(new_star)

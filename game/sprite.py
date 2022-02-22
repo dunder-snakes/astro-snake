@@ -7,16 +7,16 @@ class Sprite(pygame.sprite.Sprite):
     def __init__(self, pos):
         super().__init__()
 
-        self.image = pygame.Surface([30, 30], pygame.SRCALPHA, 32)
+        self.image = pygame.Surface([75, 75], pygame.SRCALPHA, 32)
         self.image = self.image.convert_alpha()
-        self.sp_image = pygame.image.load("../assets/cartoon_snake.png")
-        self.sprite_img = pygame.transform.scale(self.sp_image,(50, 50))
+        self.sp_image = pygame.image.load("assets/cartoon_snake.png")
+        self.sprite_img = pygame.transform.scale(self.sp_image,(75, 75))
         self.image.blit(self.sprite_img,(0,0))
         self.loaded = True
         self.recharge_time = 0
         self.laser = pygame.sprite.Group()
         self.rect = self.image.get_rect(midbottom = pos)
-        self.dist = 5
+        self.dist = c.SNAKE_SPEED
 
     def inputs(self):
         key = pygame.key.get_pressed()
