@@ -8,6 +8,7 @@ import constants as c
 import random
 from stars import Star
 from pygame import mixer
+from gameover import Gameover
 
 
 class Game:
