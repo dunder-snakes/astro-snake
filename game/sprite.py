@@ -9,7 +9,7 @@ class Sprite(pygame.sprite.Sprite):
 
         self.image = pygame.Surface([75, 75], pygame.SRCALPHA, 32)
         self.image = self.image.convert_alpha()
-        self.sp_image = pygame.image.load("assets/cartoon_snake.png")
+        self.sp_image = pygame.image.load("../assets/cartoon_snake.png")
         self.sprite_img = pygame.transform.scale(self.sp_image,(75, 75))
         self.image.blit(self.sprite_img,(0,0))
         self.loaded = True
