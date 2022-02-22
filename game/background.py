@@ -26,6 +26,8 @@ class Background(pygame.sprite.Sprite):
     self.stars.draw(self.image)
     self.timer -= 1
 
+
 # self.image.fill(self.color) will fill the background color every frame so stars do not overlap each other
+
 
 # self.stars.draw(self.image) will draw the background surface which is self.image in the init
