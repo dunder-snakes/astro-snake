@@ -23,6 +23,7 @@ class Game:
         self.player = pygame.sprite.Group()
         self.player.add(self.player_sprite)
         self.player_score = 0
+        self.health = 100
         #power up
         self.power = pygame.sprite.Group()
         self.buddy_sprite = ""
@@ -34,6 +35,7 @@ class Game:
         self.buddy_laser = ""
         # enemy
         self.eagle_enemy = Eagles()
+        self.boss = False
         self.hit_cnt = 0
         self.eagle_laser = self.eagle_enemy.eg_laser
         self.enemy = pygame.sprite.Group()
@@ -97,7 +99,8 @@ class Game:
         else:
             self.spawn_timer -= 1
 
-        if self.player_score == 5000 and len(self.eagle) < 1:
+        if self.player_score == 10000  and len(self.eagle) < 1:
+            self.boss = True
             self.eagle.add(self.eagle_enemy)
     
     def spawn_power_up(self):
@@ -165,19 +168,32 @@ class Game:
 
         if self.eagle_laser:
             for laser in self.eagle_laser:
-                if pygame.sprite.spritecollide(laser, self.player, True):
+                if pygame.sprite.spritecollide(laser, self.player, False):
+                    self.health -= 10
                     laser.kill()
-                    self.player_score += 1000
+                    if self.health <= 10:
+                        pygame.sprite.spritecollide(laser, self.player, True)
+                        laser.kill()
                 if len(self.eagle) == 0:
                     laser.kill()
+
 
                     self.player_score += c.POINTS
 
         if self.enemy:
             for enemy in self.enemy:
-                if pygame.sprite.spritecollide(enemy, self.player, True):
+                if pygame.sprite.spritecollide(enemy, self.player, False):
+                    self.health -= 20
+                    self.enemy_go_boom((enemy.rect.x, enemy.rect.y))
+                    exp_sound = mixer.Sound("../assets/explosion.wav")
+                    exp_sound.play()
                     enemy.kill()
-
+                    if self.health <= 20:
+                        pygame.sprite.spritecollide(enemy, self.player, True)
+                        enemy.kill()
+                    
+                    
+                    
         if self.eagle:
             for eagle in self.eagle:
                 if pygame.sprite.spritecollide(eagle, self.player, True):
@@ -215,6 +231,17 @@ class Game:
         text_rect.midtop = (x, y)
         surf.blit(text_surface, text_rect)
 
+# heatlth
+    def drawStatusBar(self, x, y,health):
+        bar_width = 100
+        bar_height = 10
+        bar_fill = (health / 100) * bar_width
+        bar_rect = pygame.Rect(x, y, bar_width, bar_height)
+        fill_rect = pygame.Rect(x, y, bar_fill, bar_height)
+        pygame.draw.rect(screen, c.BLUE, fill_rect)
+        pygame.draw.rect(screen, c.GOLD, bar_rect, 1)
+
+
     def game_over(self):
         if not self.player:
             pygame.quit()
@@ -243,6 +270,8 @@ if __name__ == "__main__":
         screen.fill(c.BLACK)
         
         game.draw_text(screen, str(game.player_score), 30, c.DISPLAY_X // 2, 10)
+
+        game.drawStatusBar(15,540,game.health)
 
         game.run()
 
