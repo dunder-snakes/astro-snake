@@ -11,10 +11,13 @@ from power_up import Power
 from double import Double
 from shield import Shield
 from pygame import mixer
+from button import Button
 
 
 class Game:
     def __init__(self):
+        # game start
+        self.game_start = True
         # background
         self.stars = pygame.sprite.Group()
         self.star_timer = random.randrange(1, 10)
@@ -111,8 +114,14 @@ class Game:
         self.buddy.add(self.buddy_sprite)
 
     def shield_power(self):
-        self.shield_sprite = Shield((self.player_sprite.rect.x + 45, self.player_sprite.rect.y - 10))
+        if self.buddy:
+            self.shield_sprite = Shield((self.player_sprite.rect.x + 180, self.player_sprite.rect.y - 10))
+        else:
+            self.shield_sprite = Shield((self.player_sprite.rect.x + 45, self.player_sprite.rect.y - 10))
         self.shield.add(self.shield_sprite)
+
+    def max_health(self):
+        self.health = 100
 
     def enemy_go_boom(self, pos):
         for _ in range(random.randrange(10, 30)):
@@ -132,8 +141,10 @@ class Game:
                     laser.kill()
                     self.player_score += 1000
 
-                    if self.player_score % 20000 == 0:
+                    chance = random.randint(1,11)
+                    if chance == 5:
                         self.spawn_power_up()
+
 
                 if pygame.sprite.spritecollide(laser, self.eagle, False):
                     self.hit_cnt += 1
@@ -152,7 +163,8 @@ class Game:
                     exp_sound.play()
                     laser.kill()
                     self.player_score += 1000
-                    if self.player_score % 20000 == 0:
+                    chance = random.randint(1,11)
+                    if chance == 5:
                         self.spawn_power_up()
 
                 if pygame.sprite.spritecollide(laser, self.eagle, False):
@@ -174,8 +186,6 @@ class Game:
                         laser.kill()
                 if len(self.eagle) == 0:
                     laser.kill()
-
-
                     self.player_score += c.POINTS
 
         if self.enemy:
@@ -190,8 +200,6 @@ class Game:
                         pygame.sprite.spritecollide(enemy, self.player, True)
                         enemy.kill()
                     
-                    
-                    
         if self.eagle:
             for eagle in self.eagle:
                 if pygame.sprite.spritecollide(eagle, self.player, True):
@@ -201,20 +209,19 @@ class Game:
             for power in self.power:
                 if pygame.sprite.spritecollide(power, self.player, False):
                     power.kill()
-                    random.choice([self.double_power, self.shield_power])()
+                    random.choice([self.double_power, self.shield_power, self.max_health])()
 
         if self.shield:
             for shield in self.shield:
                 if pygame.sprite.spritecollide(shield, self.enemy, True):
-                    self.enemy_go_boom((shield.rect.x + 45, shield.rect.y))
+                    self.enemy_go_boom((self.player_sprite.rect.x + 45, self.player_sprite.rect.y - 10))
                     exp_sound = mixer.Sound("../assets/explosion.wav")
                     exp_sound.play()
                     self.player_score += 1000
-                if self.eagle_laser:
-                    for laser in self.eagle_laser:
-                        if pygame.sprite.spritecollide(laser, shield, False):
-                            laser.kill()
-                
+            for laser in self.eagle_laser:
+                if pygame.sprite.spritecollide(laser, self.shield, False):
+                    laser.kill()
+
         if not self.player:
             for laser in self.eagle_laser:
                 laser.kill()
@@ -230,6 +237,7 @@ class Game:
         surf.blit(text_surface, text_rect)
 
 # heatlth
+
     def draw_health(self, x, y,health):
         bar_width = c.DISPLAY_X
         bar_height = 10
@@ -239,11 +247,22 @@ class Game:
         pygame.draw.rect(screen, c.BLUE, fill_rect)
         pygame.draw.rect(screen, c.GOLD, bar_rect, 1)
 
-
+    
     def game_over(self):
         if not self.player:
-            pygame.quit()
+            for particle in self.disintegrate:
+                particle.kill()
+            self.game_start = False
+            # pygame.quit()
 
+
+    # def switch_screens(self):
+    #     display_gameover = pygame.display.set_mode((c.DISPLAY_SIZE))
+    #     bg_image = pygame.image.load('../assets/end_screen.png')
+    #     bg_image = pygame.transform.scale(bg_image, (c.DISPLAY_SIZE))
+    #     display_gameover.blit(bg_image, (0, 0))
+    #     pygame.display.flip()
+        
 
 if __name__ == "__main__":
     pygame.init()
@@ -256,23 +275,48 @@ if __name__ == "__main__":
     mixer.music.set_volume(0.1)
     mixer.music.play()
 
-
     game = Game()
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                # game.game_loop()
                 pygame.quit()
                 sys.exit()
 
-        screen.fill(c.BLACK)
-        
-        game.draw_text(screen, str(game.player_score), 30, c.DISPLAY_X // 2, 10)
+        if game.game_start:
+            # for event in pygame.event.get():
+            #     if event.type == pygame.QUIT:
+            #         game.game_loop = False
+            #         pygame.quit()
+            #         sys.exit()
+
+            screen.fill(c.BLACK)
+            game.draw_text(screen, str(game.player_score), 30, c.DISPLAY_X // 2, 10)
+            game.draw_health(15,540,game.health)
+            game.run()
+            pygame.display.flip()
+            clock.tick(c.FPS)
+
+        else:
+            bg_image = pygame.image.load('../assets/end_screen.png')
+            bg_image = pygame.transform.scale(bg_image, (c.DISPLAY_SIZE))
+            screen.blit(bg_image, (0, 0))
+
 
         game.draw_health(0,c.DISPLAY_Y-10,game.health)
 
-        game.run()
+            MOUSE_POSITION = pygame.mouse.get_pos()
+            RESTART_BUTTON = Button(pos=(c.DISPLAY_X/2, 400), text_input="RESTART")
+            QUIT_BUTTON = Button(pos=(c.DISPLAY_X/2, 500), text_input="QUIT")
 
-        pygame.display.flip()
 
-        clock.tick(c.FPS)
+            for button in [RESTART_BUTTON, QUIT_BUTTON]:
+                button.changeColor(MOUSE_POSITION)
+                button.update(screen)
+
+            pygame.display.flip()
+            mixer.music.stop()
+            
+
+# its restarting
