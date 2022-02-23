@@ -113,8 +113,14 @@ class Game:
         self.buddy.add(self.buddy_sprite)
 
     def shield_power(self):
-        self.shield_sprite = Shield((self.player_sprite.rect.x + 45, self.player_sprite.rect.y - 10))
+        if self.buddy:
+            self.shield_sprite = Shield((self.player_sprite.rect.x + 180, self.player_sprite.rect.y - 10))
+        else:
+            self.shield_sprite = Shield((self.player_sprite.rect.x + 45, self.player_sprite.rect.y - 10))
         self.shield.add(self.shield_sprite)
+
+    def max_health(self):
+        self.health = 100
 
     def enemy_go_boom(self, pos):
         for _ in range(random.randrange(10, 30)):
@@ -134,8 +140,10 @@ class Game:
                     laser.kill()
                     self.player_score += 1000
 
-                    if self.player_score % 20000 == 0:
+                    chance = random.randint(1,11)
+                    if chance == 5:
                         self.spawn_power_up()
+
 
                 if pygame.sprite.spritecollide(laser, self.eagle, False):
                     self.hit_cnt += 1
@@ -154,7 +162,8 @@ class Game:
                     exp_sound.play()
                     laser.kill()
                     self.player_score += 1000
-                    if self.player_score % 20000 == 0:
+                    chance = random.randint(1,11)
+                    if chance == 5:
                         self.spawn_power_up()
 
                 if pygame.sprite.spritecollide(laser, self.eagle, False):
@@ -176,8 +185,6 @@ class Game:
                         laser.kill()
                 if len(self.eagle) == 0:
                     laser.kill()
-
-
                     self.player_score += c.POINTS
 
         if self.enemy:
@@ -192,8 +199,6 @@ class Game:
                         pygame.sprite.spritecollide(enemy, self.player, True)
                         enemy.kill()
                     
-                    
-                    
         if self.eagle:
             for eagle in self.eagle:
                 if pygame.sprite.spritecollide(eagle, self.player, True):
@@ -203,20 +208,19 @@ class Game:
             for power in self.power:
                 if pygame.sprite.spritecollide(power, self.player, False):
                     power.kill()
-                    random.choice([self.double_power, self.shield_power])()
+                    random.choice([self.double_power, self.shield_power, self.max_health])()
 
         if self.shield:
             for shield in self.shield:
                 if pygame.sprite.spritecollide(shield, self.enemy, True):
-                    self.enemy_go_boom((shield.rect.x + 45, shield.rect.y))
+                    self.enemy_go_boom((self.player_sprite.rect.x + 45, self.player_sprite.rect.y - 10))
                     exp_sound = mixer.Sound("../assets/explosion.wav")
                     exp_sound.play()
                     self.player_score += 1000
-                if self.eagle_laser:
-                    for laser in self.eagle_laser:
-                        if pygame.sprite.spritecollide(laser, shield, False):
-                            laser.kill()
-                
+            for laser in self.eagle_laser:
+                if pygame.sprite.spritecollide(laser, self.shield, False):
+                    laser.kill()
+
         if not self.player:
             for laser in self.eagle_laser:
                 laser.kill()
@@ -232,8 +236,8 @@ class Game:
         surf.blit(text_surface, text_rect)
 
 # heatlth
-    def draw_health(self, x, y,health):
-        bar_width = 100
+    def drawStatusBar(self, x, y,health):
+        bar_width = 570
         bar_height = 10
         bar_fill = (health / 100) * bar_width
         bar_rect = pygame.Rect(x, y, bar_width, bar_height)
