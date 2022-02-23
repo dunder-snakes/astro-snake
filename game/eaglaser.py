@@ -15,5 +15,5 @@ class Eaglaser(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.y += 3
-        if self.rect.y > 600:
+        if self.rect.y > c.DISPLAY_Y:
             self.kill()
