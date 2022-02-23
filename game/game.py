@@ -38,7 +38,6 @@ class Game:
         self.buddy_laser = ""
         # enemy
         self.eagle_enemy = Eagles()
-        self.boss = False
         self.hit_cnt = 0
         self.eagle_laser = self.eagle_enemy.eg_laser
         self.enemy = pygame.sprite.Group()
@@ -102,9 +101,8 @@ class Game:
         else:
             self.spawn_timer -= 1
 
-        if self.player_score == 10000  and len(self.eagle) < 1:
-            self.boss = True
-            self.eagle.add(self.eagle_enemy)
+        if self.player_score == 15000 and len(self.eagle) < 1: 
+                self.eagle.add(self.eagle_enemy)
     
     def spawn_power_up(self):
         new_power = Power()
@@ -239,12 +237,13 @@ class Game:
         surf.blit(text_surface, text_rect)
 
 # heatlth
-    def drawStatusBar(self, x, y,health):
-        bar_width = 570
+
+    def draw_health(self, x, y,health):
+        bar_width = c.DISPLAY_X
         bar_height = 10
         bar_fill = (health / 100) * bar_width
-        bar_rect = pygame.Rect(x, y, bar_width, bar_height)
-        fill_rect = pygame.Rect(x, y, bar_fill, bar_height)
+        bar_rect = pygame.Rect(0, c.DISPLAY_Y-bar_height, bar_width, bar_height)
+        fill_rect = pygame.Rect(0, c.DISPLAY_Y-bar_height, bar_fill, bar_height)
         pygame.draw.rect(screen, c.BLUE, fill_rect)
         pygame.draw.rect(screen, c.GOLD, bar_rect, 1)
 
@@ -304,9 +303,13 @@ if __name__ == "__main__":
             bg_image = pygame.transform.scale(bg_image, (c.DISPLAY_SIZE))
             screen.blit(bg_image, (0, 0))
 
+
+        game.draw_health(0,c.DISPLAY_Y-10,game.health)
+
             MOUSE_POSITION = pygame.mouse.get_pos()
             RESTART_BUTTON = Button(pos=(c.DISPLAY_X/2, 400), text_input="RESTART")
             QUIT_BUTTON = Button(pos=(c.DISPLAY_X/2, 500), text_input="QUIT")
+
 
             for button in [RESTART_BUTTON, QUIT_BUTTON]:
                 button.changeColor(MOUSE_POSITION)

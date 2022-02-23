@@ -9,10 +9,8 @@ class Eagles(pygame.sprite.Sprite):
 
         self.image = pygame.Surface([150, 150], pygame.SRCALPHA, 32)
         self.image = self.image.convert_alpha()
-
         self.en_image = pygame.image.load('../assets/pngegg.png')
         self.enemy = pygame.transform.scale(self.en_image,(150, 150))
-
         self.image.blit(self.enemy,(0,0))
         self.rect = self.image.get_rect()
         self.rect.x = random.randrange(0, c.DISPLAY_X-self.rect.width)
@@ -38,9 +36,9 @@ class Eagles(pygame.sprite.Sprite):
             self.enemy_fire()
         if self.loaded is False:
             self.recharge()
-        if self.rect.x < 10:
+        if self.rect.x < 0:
             self.edge = True
-        if self.rect.x > 450:
+        if self.rect.x > c.DISPLAY_X -90:
             self.edge = False
         if self.edge:
             self.rect.x += self.speed_x
