@@ -275,7 +275,7 @@ if __name__ == "__main__":
         
         game.draw_text(screen, str(game.player_score), 30, c.DISPLAY_X // 2, 10)
 
-        game.drawStatusBar(15,540,game.health)
+        game.draw_health(15,540,game.health)
 
         game.run()
 
