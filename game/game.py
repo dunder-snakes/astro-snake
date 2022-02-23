@@ -11,10 +11,13 @@ from power_up import Power
 from double import Double
 from shield import Shield
 from pygame import mixer
+from button import Button
 
 
 class Game:
     def __init__(self):
+        # game start
+        self.game_start = True
         # background
         self.stars = pygame.sprite.Group()
         self.star_timer = random.randrange(1, 10)
@@ -245,11 +248,22 @@ class Game:
         pygame.draw.rect(screen, c.BLUE, fill_rect)
         pygame.draw.rect(screen, c.GOLD, bar_rect, 1)
 
-
+    
     def game_over(self):
         if not self.player:
-            pygame.quit()
+            for particle in self.disintegrate:
+                particle.kill()
+            self.game_start = False
+            # pygame.quit()
 
+
+    # def switch_screens(self):
+    #     display_gameover = pygame.display.set_mode((c.DISPLAY_SIZE))
+    #     bg_image = pygame.image.load('../assets/end_screen.png')
+    #     bg_image = pygame.transform.scale(bg_image, (c.DISPLAY_SIZE))
+    #     display_gameover.blit(bg_image, (0, 0))
+    #     pygame.display.flip()
+        
 
 if __name__ == "__main__":
     pygame.init()
@@ -262,23 +276,44 @@ if __name__ == "__main__":
     mixer.music.set_volume(0.1)
     mixer.music.play()
 
-
     game = Game()
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                # game.game_loop()
                 pygame.quit()
                 sys.exit()
 
-        screen.fill(c.BLACK)
-        
-        game.draw_text(screen, str(game.player_score), 30, c.DISPLAY_X // 2, 10)
+        if game.game_start:
+            # for event in pygame.event.get():
+            #     if event.type == pygame.QUIT:
+            #         game.game_loop = False
+            #         pygame.quit()
+            #         sys.exit()
 
-        game.draw_health(15,540,game.health)
+            screen.fill(c.BLACK)
+            game.draw_text(screen, str(game.player_score), 30, c.DISPLAY_X // 2, 10)
+            game.draw_health(15,540,game.health)
+            game.run()
+            pygame.display.flip()
+            clock.tick(c.FPS)
 
-        game.run()
+        else:
+            bg_image = pygame.image.load('../assets/end_screen.png')
+            bg_image = pygame.transform.scale(bg_image, (c.DISPLAY_SIZE))
+            screen.blit(bg_image, (0, 0))
 
-        pygame.display.flip()
+            MOUSE_POSITION = pygame.mouse.get_pos()
+            RESTART_BUTTON = Button(pos=(c.DISPLAY_X/2, 400), text_input="RESTART")
+            QUIT_BUTTON = Button(pos=(c.DISPLAY_X/2, 500), text_input="QUIT")
 
-        clock.tick(c.FPS)
+            for button in [RESTART_BUTTON, QUIT_BUTTON]:
+                button.changeColor(MOUSE_POSITION)
+                button.update(screen)
+
+            pygame.display.flip()
+            mixer.music.stop()
+            
+
+# its restarting
