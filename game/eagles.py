@@ -27,11 +27,6 @@ class Eagles(pygame.sprite.Sprite):
         self.eg_laser.add(Eaglaser(self.rect.midbottom))
         self.loaded = False
         self.recharge_time = pygame.time.get_ticks()
-
-    # def blitRotateCenter(surf, image, topleft, angle):
-    #     rotated_image = pygame.transform.rotate(image, angle)
-    #     new_rect = rotated_image.get_rect(center = image.get_rect(topleft = topleft).center)
-    #     surf.blit(rotated_image, new_rect.topleft)
     
     def recharge(self):
         if pygame.time.get_ticks() - self.recharge_time > 750:

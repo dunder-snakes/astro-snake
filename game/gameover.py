@@ -4,7 +4,7 @@ import constants as c
 
 class Gameover(pygame.sprite.Sprite):
   def __init__(self):
-    super(Gameover, self).__init__()
+    super(self).__init__()
 
     display_gameover = pygame.display.set_mode((c.DISPLAY_SIZE))
     bg_image = pygame.image.load('../assets/1781.jpg')
@@ -18,8 +18,8 @@ class Gameover(pygame.sprite.Sprite):
     #       pygame.quit()
     #       system.exit()
     #       running = False
-    # display_gameover.blit(bg_image, (0, 0))
-    # pygame.display.flip()
+    display_gameover.blit(bg_image, (0, 0))
+    pygame.display.flip()
 
 
 
