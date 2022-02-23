@@ -35,7 +35,6 @@ class Game:
         self.buddy_laser = ""
         # enemy
         self.eagle_enemy = Eagles()
-        self.boss = False
         self.hit_cnt = 0
         self.eagle_laser = self.eagle_enemy.eg_laser
         self.enemy = pygame.sprite.Group()
@@ -99,9 +98,8 @@ class Game:
         else:
             self.spawn_timer -= 1
 
-        if self.player_score == 10000  and len(self.eagle) < 1:
-            self.boss = True
-            self.eagle.add(self.eagle_enemy)
+        if self.player_score == 15000 and len(self.eagle) < 1: 
+                self.eagle.add(self.eagle_enemy)
     
     def spawn_power_up(self):
         new_power = Power()
@@ -233,11 +231,11 @@ class Game:
 
 # heatlth
     def draw_health(self, x, y,health):
-        bar_width = 100
+        bar_width = c.DISPLAY_X
         bar_height = 10
         bar_fill = (health / 100) * bar_width
-        bar_rect = pygame.Rect(x, y, bar_width, bar_height)
-        fill_rect = pygame.Rect(x, y, bar_fill, bar_height)
+        bar_rect = pygame.Rect(0, c.DISPLAY_Y-bar_height, bar_width, bar_height)
+        fill_rect = pygame.Rect(0, c.DISPLAY_Y-bar_height, bar_fill, bar_height)
         pygame.draw.rect(screen, c.BLUE, fill_rect)
         pygame.draw.rect(screen, c.GOLD, bar_rect, 1)
 
@@ -271,7 +269,7 @@ if __name__ == "__main__":
         
         game.draw_text(screen, str(game.player_score), 30, c.DISPLAY_X // 2, 10)
 
-        game.draw_health(15,540,game.health)
+        game.draw_health(0,c.DISPLAY_Y-10,game.health)
 
         game.run()
 

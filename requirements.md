@@ -15,7 +15,7 @@
   * Enemies moving
   * Hit detection
   * Have sprite/image for the snake “python”
-  * Game over page with About Us link
+  * Game over page
 # Stretch
   * Power Ups
     * Additional lazers 
