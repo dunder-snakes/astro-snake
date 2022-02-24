@@ -12,7 +12,7 @@ def test_frames_per_second():
     assert FPS == 60
 
 def test_distance():
-    assert DISTANCE == 5
+    assert SNAKE_SPEED == 5
 
 def test_points():
     assert POINTS == 1000
