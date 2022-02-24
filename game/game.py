@@ -141,8 +141,7 @@ class Game:
                     laser.kill()
                     self.player_score += 1000
 
-                    chance = random.randint(1,11)
-                    if chance == 5:
+                    if self.player_score % 10000 == 0:
                         self.spawn_power_up()
 
 
@@ -163,8 +162,7 @@ class Game:
                     exp_sound.play()
                     laser.kill()
                     self.player_score += 1000
-                    chance = random.randint(1,11)
-                    if chance == 5:
+                    if self.player_score % 10000 == 0:
                         self.spawn_power_up()
 
                 if pygame.sprite.spritecollide(laser, self.eagle, False):
@@ -209,7 +207,7 @@ class Game:
             for power in self.power:
                 if pygame.sprite.spritecollide(power, self.player, False):
                     power.kill()
-                    random.choice([self.double_power, self.shield_power, self.max_health])()
+                    random.choice([self.double_power, self.shield_power])()
 
         if self.shield:
             for shield in self.shield:
