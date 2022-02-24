@@ -17,6 +17,7 @@ class Laser(pygame.sprite.Sprite):
         laser_sound = mixer.Sound("../assets/laser.mp3")
         laser_sound.play()
 
+
     def update(self):
         self.rect.y += c.LASER_SPEED
         if self.rect.y < 0:

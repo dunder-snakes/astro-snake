@@ -2,7 +2,7 @@ import pygame
 from laser import Laser
 import constants as c
 
-class Sprite(pygame.sprite.Sprite):
+class Double(pygame.sprite.Sprite):
 
     def __init__(self, pos):
         super().__init__()
@@ -17,6 +17,8 @@ class Sprite(pygame.sprite.Sprite):
         self.laser = pygame.sprite.Group()
         self.rect = self.image.get_rect(midbottom = pos)
         self.dist = c.SNAKE_SPEED
+        self.spawn_time = pygame.time.get_ticks()
+        self.duration = 30
 
     def inputs(self):
         key = pygame.key.get_pressed()
@@ -54,5 +56,7 @@ class Sprite(pygame.sprite.Sprite):
         self.inputs()
         self.recharge()
         self.laser.update()
+        if (pygame.time.get_ticks() - self.spawn_time) / 1000 > self.duration:
+            self.kill()
 
 
